@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://pw26o3khod3a"]
+
+[ext_resource type="PackedScene" path="res://scenes/base_character.tscn" id="1_0tkev"]
+[ext_resource type="Script" uid="uid://c853fdcolng3" path="res://scenes/enemies/barrel/barrel.gd" id="2_nq07t"]
+[ext_resource type="Texture2D" uid="uid://8xv3tso56oou" path="res://assets/monsters/barrel/barrel_sprite_sheet.png" id="3_wwigk"]
+[ext_resource type="AnimationLibrary" uid="uid://s0xkp2t7er6t" path="res://scenes/enemies/barrel/barrel_anims.tres" id="4_5x77b"]
+[ext_resource type="Script" uid="uid://bec57758p7ipw" path="res://scripts/node3d_factory.gd" id="5_t8iir"]
+[ext_resource type="PackedScene" uid="uid://bom1qgmc5c672" path="res://scenes/enemies/barrel/barrel_bullet.tscn" id="6_pdnpt"]
+[ext_resource type="Script" uid="uid://dc36oki41hdqb" path="res://scenes/enemies/barrel/states/idle.gd" id="7_wwigk"]
+[ext_resource type="Script" uid="uid://d3vpxihaqugxy" path="res://scenes/enemies/barrel/states/shoot.gd" id="8_5x77b"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wwigk"]
+height = 1.0
+radius = 5.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_htemk"]
+radius = 0.55
+height = 1.5
+
+[node name="Barrel" unique_id=75156816 instance=ExtResource("1_0tkev")]
+collision_layer = 8
+script = ExtResource("2_nq07t")
+bullet_speed = 12.0
+movement_speed = 0.0
+
+[node name="Sprite3D" parent="." index="0"]
+offset = Vector2(0, 15.5)
+texture = ExtResource("3_wwigk")
+hframes = 3
+vframes = 9
+
+[node name="AnimationPlayer" parent="." index="1"]
+libraries/ = ExtResource("4_5x77b")
+
+[node name="BulletFactory" type="Marker3D" parent="Direction" index="0" unique_id=1968576212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.8)
+script = ExtResource("5_t8iir")
+product_packed_scene = ExtResource("6_pdnpt")
+target_container_name = &"Bullets"
+metadata/_custom_type_script = "uid://bec57758p7ipw"
+
+[node name="DetectPlayerArea3D" type="Area3D" parent="Direction" index="1" unique_id=205273558]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Direction/DetectPlayerArea3D" index="0" unique_id=779340052]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_wwigk")
+
+[node name="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_htemk")
+
+[node name="Idle" type="Node" parent="States" index="0" unique_id=560485768]
+script = ExtResource("7_wwigk")
+
+[node name="Shoot" type="Node" parent="States" index="1" unique_id=1344237322]
+script = ExtResource("8_5x77b")

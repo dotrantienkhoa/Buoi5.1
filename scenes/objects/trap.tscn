@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://b3ydq6el35r7g"]
+
+[ext_resource type="Script" uid="uid://bvv36o7f0oebf" path="res://scripts/hit_area_3d.gd" id="2_aptff"]
+[ext_resource type="ArrayMesh" uid="uid://cv7wlkl21rta6" path="res://assets/models/objects/trap_base.res" id="2_j00yx"]
+[ext_resource type="ArrayMesh" uid="uid://bcaist3raq15h" path="res://assets/models/objects/trap_spikes.res" id="3_e1fc1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_htemk"]
+size = Vector3(1.4, 0.5, 1.4)
+
+[sub_resource type="Animation" id="Animation_j7k17"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TrapSpike:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitArea3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xo5pu"]
+resource_name = "active"
+length = 2.5000000000000004
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TrapSpike:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.1, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitArea3D/CollisionShape3D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.1, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h473t"]
+_data = {
+&"RESET": SubResource("Animation_j7k17"),
+&"active": SubResource("Animation_xo5pu")
+}
+
+[node name="Trap" type="Node3D" unique_id=535699542]
+
+[node name="HitArea3D" type="Area3D" parent="." unique_id=121304898]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("2_aptff")
+metadata/_custom_type_script = "uid://bvv36o7f0oebf"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitArea3D" unique_id=262000300]
+shape = SubResource("BoxShape3D_htemk")
+disabled = true
+
+[node name="TrapBase" type="MeshInstance3D" parent="." unique_id=1401144204]
+transform = Transform3D(-4.8082527e-10, -0.011, 0, 0.011, -4.8082527e-10, 0, 0, 0, 0.011, 0, 0, 0)
+mesh = ExtResource("2_j00yx")
+
+[node name="TrapSpike" type="MeshInstance3D" parent="." unique_id=537968679]
+transform = Transform3D(-4.8082527e-10, -0.011, 0, 0.011, -4.8082527e-10, 0, 0, 0, 0.011, 0, 0, 0)
+visible = false
+mesh = ExtResource("3_e1fc1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1241475280]
+libraries/ = SubResource("AnimationLibrary_h473t")
+autoplay = &"active"
